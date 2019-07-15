@@ -1,0 +1,92 @@
+{
+  "name": "WIPP UNet CNN Inference Plugin",
+  "version": "0.0.1",
+  "title": "UNet CNN Inference",
+  "description": "Inference with a UNet CNN model",
+  "containerId": "wipp/wipp-unet-cnn-inference-plugin:0.0.1",
+  "inputs": [
+
+    {
+      "name": "imageDir",
+      "type": "collection",
+      "options": {
+        "format": "tiledtiff"
+      },
+      "description": "Input images to be inferenced using the plugin.",
+      "required": true
+    },
+    {
+      "name": "savedModel",
+      "type": "collection",
+      "description": "Folder containing the trained model.",
+      "required": true
+    },
+    {
+      "name": "useTiling",
+      "type": "enum",
+			"options": {
+				"values": [
+					"NO","YES"
+				]
+			},
+      "description": "Controls whether or not to tile the input images for training in order to fit them into GPU memory.",
+      "required": true,
+      "default": "NO"
+    },
+    {
+      "name": "tileSize",
+      "type": "number",
+      "description": "Tile size for tiling input images in order to fit them into GPU memory.",
+      "required": false,
+      "default": 256
+    }
+  ],
+  "outputs": [
+    {
+      "name": "outputDir",
+      "type": "collection",
+      "options": {
+        "format": "tiff"
+      },
+      "description": "Output data for the plugin"
+    }
+  ],
+  "ui": [
+    {
+      "key": "inputs.imageDir",
+      "title": "Image Collection: ",
+      "description": "Pick a collection..."
+    },
+    {
+      "key": "inputs.useTiling",
+      "title": "Tile Input Images: ",
+      "description": "Whether to tile images to fit them in GPU memory"
+    },
+    {
+      "key": "inputs.tileSize",
+      "title": "Tile Size: ",
+      "description": "What size to make the image tiles?",
+      "condition": "model.inputs.useTiling=='YES'"
+    },
+    {
+            "key" : "fieldsets",
+            "fieldsets": [
+                {
+                  "title": "-- Input images --",
+                  "fields": [
+                    "imageDir",
+                    "savedModel"
+                  ]
+                },
+                {
+                  "title": "-- Data Configuration --",
+                  "fields": [
+                    "useTiling",
+                    "tileSize"
+                  ]
+                }
+            ]
+        }
+
+  ]
+}
