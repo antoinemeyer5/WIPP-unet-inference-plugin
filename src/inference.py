@@ -138,34 +138,28 @@ def _inference_tiling(img, model, tile_size):
 
             softmax = model(batch_data) # model output defined in unet_model is softmax
             softmax = np.squeeze(softmax)
-            prob_0_tmp = np.squeeze(softmax[:,:,0])
             pred = np.squeeze(np.argmax(softmax, axis=-1).astype(np.int32))
 
 
             # radius_pre_x
             if radius_pre_x > 0:
                 pred = pred[:, radius_pre_x:]
-                prob_0_tmp = prob_0_tmp[:, radius_pre_x:]
 
             # radius_pre_y
             if radius_pre_y > 0:
                 pred = pred[radius_pre_y:, :]
-                prob_0_tmp = prob_0_tmp[radius_pre_y:, :]
 
             # radius_post_x
             if radius_post_x > 0:
                 pred = pred[:, :-radius_post_x]
-                prob_0_tmp = prob_0_tmp[:, :-radius_post_x]
 
             # radius_post_y
             if radius_post_y > 0:
                 pred = pred[:-radius_post_y, :]
-                prob_0_tmp = prob_0_tmp[:-radius_post_y, :]
 
             mask[y_st_z:y_end_z, x_st_z:x_end_z] = pred
-            prob_0[y_st_z:y_end_z, x_st_z:x_end_z] = prob_0_tmp
 
-    return mask, prob_0
+    return mask
 
 
 def _inference(img, model):
@@ -192,17 +186,14 @@ def _inference(img, model):
 
     softmax = model(batch_data) # model output defined in unet_model is softmax
     softmax = np.squeeze(softmax)
-    prob_0 = np.squeeze(softmax[:,:,0])
     pred = np.squeeze(np.argmax(softmax, axis=-1).astype(np.int32))
 
     if pad_x > 0:
         pred = pred[:, 0:-pad_x]
-        prob_0 = prob_0[:, 0:-pad_x]
     if pad_y > 0:
         pred = pred[0:-pad_y, :]
-        prob_0 = prob_0[0:-pad_y, :]
 
-    return pred, prob_0
+    return pred
 
 
 def inference(saved_model_filepath, image_folder, output_folder, image_format):
@@ -236,9 +227,9 @@ def inference(saved_model_filepath, image_folder, output_folder, image_format):
             tile_size = 512
             if img.shape[0] >= 2048 or img.shape[1] >= 2048:
                 tile_size = 1024
-            segmented_mask, prob_0 = _inference_tiling(img, model, tile_size)
+            segmented_mask = _inference_tiling(img, model, tile_size)
         else:
-            segmented_mask, prob_0 = _inference(img, model)
+            segmented_mask = _inference(img, model)
 
         if 0 <= np.max(segmented_mask) <= 255:
             segmented_mask = segmented_mask.astype(np.uint8)
