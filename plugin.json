@@ -1,9 +1,9 @@
 {
   "name": "WIPP UNet CNN Inference Plugin",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "title": "UNet CNN Inference",
   "description": "Inference with a UNet CNN model",
-  "containerId": "wipp/wipp-unet-cnn-inference-plugin:0.0.1",
+  "containerId": "wipp/wipp-unet-cnn-inference-plugin:0.0.2",
   "inputs": [
     {
       "name": "imageDir",
