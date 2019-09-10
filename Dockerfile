@@ -12,6 +12,7 @@ ARG DATA_DIR="/data"
 #Create folders
 RUN mkdir -p ${EXEC_DIR} \
     && mkdir -p ${DATA_DIR}/images \
+    && mkdir -p ${DATA_DIR}/model \
     && mkdir -p ${DATA_DIR}/outputs
 
 RUN pip3 install lmdb scikit-image

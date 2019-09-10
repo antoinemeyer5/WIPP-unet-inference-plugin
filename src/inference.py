@@ -18,6 +18,7 @@ if int(tf_version[0]) != 2:
 import unet_model
 import numpy as np
 import skimage.io
+import warnings
 
 
 def zscore_normalize(image_data):
@@ -206,6 +207,10 @@ def inference(saved_model_filepath, image_folder, output_folder, image_format):
 
     img_filepath_list = [os.path.join(image_folder, fn) for fn in os.listdir(image_folder) if fn.endswith('.{}'.format(image_format))]
 
+    print('Loading saved model')
+    print('  found files:')
+    for fn in os.listdir(saved_model_filepath):
+        print(fn)
     model = tf.saved_model.load(saved_model_filepath)
 
     print('Starting inference of file list')
@@ -214,7 +219,7 @@ def inference(saved_model_filepath, image_folder, output_folder, image_format):
         _, slide_name = os.path.split(img_filepath)
         print('{}/{} : {}'.format(i, len(img_filepath_list), slide_name))
 
-        print('Loading image: {}'.format(img_filepath))
+        # print('Loading image: {}'.format(img_filepath))
         img = skimage.io.imread(img_filepath) # HW or HWC format
         img = img.astype(np.float32)
 
@@ -235,14 +240,17 @@ def inference(saved_model_filepath, image_folder, output_folder, image_format):
             segmented_mask = segmented_mask.astype(np.uint16)
         if np.max(segmented_mask) > 65536:
             segmented_mask = segmented_mask.astype(np.int32)
-        skimage.io.imsave(os.path.join(output_folder, slide_name), segmented_mask)
+
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            skimage.io.imsave(os.path.join(output_folder, slide_name), segmented_mask)
 
 
 def main():
     # Setup the Argument parsing
     parser = argparse.ArgumentParser(prog='inference', description='Script which inferences a folder of images using a unet model')
 
-    parser.add_argument('--savedModel', dest='saved_model_filepath', type=str,
+    parser.add_argument('--model', dest='saved_model_filepath', type=str,
                         help='SavedModel filepath to the  model to use', required=True)
     parser.add_argument('--imageDir', dest='image_dir', type=str, help='filepath to the directory containing the images', required=True)
     parser.add_argument('--outputDir', dest='output_dir', type=str, help='Folder where outputs will be saved (Required)', required=True)
@@ -254,8 +262,9 @@ def main():
     output_dir = args.output_dir
     image_dir = args.image_dir
 
-    print('image_dir = {}'.format(image_dir))
-    print('output_dir = {}'.format(output_dir))
+    print('model = {}'.format(saved_model_filepath))
+    print('imageDir = {}'.format(image_dir))
+    print('outputDir = {}'.format(output_dir))
 
     image_format = 'tif'
 

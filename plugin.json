@@ -1,9 +1,9 @@
 {
   "name": "WIPP UNet CNN Inference Plugin",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "title": "UNet CNN Inference",
   "description": "Inference with a UNet CNN model",
-  "containerId": "wipp/wipp-unet-cnn-inference-plugin:0.0.2",
+  "containerId": "wipp/wipp-unet-cnn-inference-plugin:0.0.4",
   "inputs": [
     {
       "name": "imageDir",
@@ -15,7 +15,7 @@
       "required": true
     },
     {
-      "name": "savedModel",
+      "name": "model",
       "type": "tensorflowModel",
       "description": "Model to use for inferencing",
       "required": true
@@ -38,7 +38,7 @@
       "description": "Pick a collection..."
     },
     {
-      "key": "inputs.savedModel",
+      "key": "inputs.model",
       "title": "Trained AI Model: ",
       "description": "Pick a model..."
     }

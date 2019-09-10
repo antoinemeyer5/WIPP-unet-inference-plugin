@@ -4,5 +4,5 @@ syntax: glob
 .idea
 */.idea
 
-
+__pycache__
 
