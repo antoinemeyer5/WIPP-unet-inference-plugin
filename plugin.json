@@ -1,6 +1,6 @@
 {
   "name": "WIPP UNet CNN Inference Plugin",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "title": "UNet CNN Inference",
   "author": "Michael Majurski",
     "institution": "National Institute of Standards and Technology",
