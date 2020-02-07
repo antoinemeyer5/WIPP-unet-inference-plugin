@@ -243,7 +243,10 @@ def inference(saved_model_filepath, image_folder, output_folder, image_format):
 
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
-            skimage.io.imsave(os.path.join(output_folder, slide_name), segmented_mask)
+            if 'tif' in image_format:
+                skimage.io.imsave(os.path.join(output_folder, slide_name), segmented_mask, compress=6, bigtiff=True, tile=(1024,1024))
+            else:
+                skimage.io.imsave(os.path.join(output_folder, slide_name), segmented_mask, compress=6)
 
 
 def main():
