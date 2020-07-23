@@ -12,7 +12,7 @@ docker pull wipp/wipp-unet-cnn-inference-plugin
 ```bash
 #!/bin/bash
 
-version=0.0.5
+version=0.0.6
 docker build . -t wipp/wipp-unet-cnn-inference-plugin:latest
 docker build . -t wipp/wipp-unet-cnn-inference-plugin:${version}
 ```
@@ -20,7 +20,7 @@ docker build . -t wipp/wipp-unet-cnn-inference-plugin:${version}
 ## Run Docker File
 
 ```bash
-nvidia-docker run \
+docker run  --gpus device=all \
     -v "path/to/input/data/folder":/data/inputs \
     -v "path/to/output/folder":/data/outputs \
     -v "path/to/model/folder":/data/model \
