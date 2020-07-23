@@ -22,6 +22,9 @@ import numpy as np
 import skimage.io
 import warnings
 
+gpu_devices = tf.config.experimental.list_physical_devices('GPU')
+for device in gpu_devices:
+    tf.config.experimental.set_memory_growth(device, True)
 
 def zscore_normalize(image_data):
     image_data = image_data.astype(np.float32)

@@ -6,3 +6,4 @@ syntax: glob
 
 __pycache__
 
+**/.DS_Store
