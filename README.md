@@ -12,7 +12,7 @@ docker pull wipp/wipp-unet-cnn-inference-plugin
 ```bash
 #!/bin/bash
 
-version=0.0.6
+version=0.0.7
 docker build . -t wipp/wipp-unet-cnn-inference-plugin:latest
 docker build . -t wipp/wipp-unet-cnn-inference-plugin:${version}
 ```
@@ -36,6 +36,7 @@ usage: inference [-h]
                 --savedModel SAVED_MODEL_FILEPATH 
                 --imageDir IMAGE_DIR
                 --outputDir OUTPUT_DIR
+                 [--useIntensityScaling USE_INTENSITY_SCALING] 
                  [--useTiling USE_TILING] 
                  [--tileSize TILE_SIZE] 
 

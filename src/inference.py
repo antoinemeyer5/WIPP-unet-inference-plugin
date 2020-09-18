@@ -201,7 +201,7 @@ def _inference(img, model):
     return pred
 
 
-def inference(saved_model_filepath, image_folder, output_folder, image_format):
+def inference(saved_model_filepath, image_folder, output_folder, image_format, use_intensity_scaling):
     # create output filepath
     if not os.path.exists(output_folder):
         os.mkdir(output_folder)
@@ -228,8 +228,9 @@ def inference(saved_model_filepath, image_folder, output_folder, image_format):
         img = skimage.io.imread(img_filepath) # HW or HWC format
         img = img.astype(np.float32)
 
-        # normalize with whole image stats
-        img = zscore_normalize(img)
+        # enable or disable intensity scaling - added to support concrete project
+        if use_intensity_scaling:
+            img = zscore_normalize(img) # normalize with whole image stats
         print('  img.shape={}'.format(img.shape))
 
         if img.shape[0] > 1024 or img.shape[1] > 1024:
@@ -262,6 +263,9 @@ def main():
                         help='SavedModel filepath to the  model to use', required=True)
     parser.add_argument('--imageDir', dest='image_dir', type=str, help='filepath to the directory containing the images', required=True)
     parser.add_argument('--outputDir', dest='output_dir', type=str, help='Folder where outputs will be saved (Required)', required=True)
+    # added for the concrete project
+    parser.add_argument('--useIntensityScaling', dest='use_intensity_scaling', type=str,
+                        help='whether to use intensity scaling when inferring [YES, NO]', default="YES")
 
     print('Arguments:')
     args = parser.parse_args()
@@ -269,14 +273,17 @@ def main():
     saved_model_filepath = args.saved_model_filepath
     output_dir = args.output_dir
     image_dir = args.image_dir
+    use_intensity_scaling = args.use_intensity_scaling
+    use_intensity_scaling = use_intensity_scaling.upper() == "YES"
 
     print('model = {}'.format(saved_model_filepath))
     print('imageDir = {}'.format(image_dir))
     print('outputDir = {}'.format(output_dir))
+    print('use_intensity_scaling = {}'.format(use_intensity_scaling))
 
     image_format = 'tif'
 
-    inference(saved_model_filepath, image_dir, output_dir, image_format)
+    inference(saved_model_filepath, image_dir, output_dir, image_format, use_intensity_scaling)
 
 
 if __name__ == "__main__":
