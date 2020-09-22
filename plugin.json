@@ -57,6 +57,11 @@
       "key": "inputs.model",
       "title": "Trained AI Model: ",
       "description": "Pick a model..."
+    },
+	{
+      "key": "inputs.useIntensityScaling",
+	  "title": "Use Intensity Scaling: ",
+      "description": "Whether or not to use intensity scaling during inference."
     }
   ]
 }
