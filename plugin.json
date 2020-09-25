@@ -29,7 +29,7 @@
       "type": "enum",
 			"options": {
 				"values": [
-					"NO","YES"
+					"YES","NO"
 				]
 			},
       "description": "Controls whether or not to intensity-scale the input images for inference in order to accommodate unevenly distributed intensity-defining classes across multiple images.",
@@ -57,6 +57,11 @@
       "key": "inputs.model",
       "title": "Trained AI Model: ",
       "description": "Pick a model..."
+    },
+	{
+      "key": "inputs.useIntensityScaling",
+	  "title": "Use Intensity Scaling: ",
+      "description": "Whether or not to use intensity scaling during inference."
     }
   ]
 }
