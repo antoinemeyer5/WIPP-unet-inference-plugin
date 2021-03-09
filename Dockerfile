@@ -22,8 +22,6 @@ RUN pip3 install lmdb scikit-image imagecodecs
 #Copy executable
 COPY src ${EXEC_DIR}/
 
-WORKDIR ${EXEC_DIR}
-
 # Default command. Additional arguments are provided through the command line
-ENTRYPOINT ["python3", "inference.py"]
+ENTRYPOINT ["python3", "/opt/executables/inference.py"]
 
