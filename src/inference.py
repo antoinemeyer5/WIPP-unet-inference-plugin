@@ -22,9 +22,10 @@ import numpy as np
 import skimage.io
 import warnings
 
-gpu_devices = tf.config.experimental.list_physical_devices('GPU')
+gpu_devices = tf.config.list_physical_devices('GPU')
 for device in gpu_devices:
     tf.config.experimental.set_memory_growth(device, True)
+
 
 def zscore_normalize(image_data):
     image_data = image_data.astype(np.float32)
@@ -230,11 +231,11 @@ def inference(saved_model_filepath, image_folder, output_folder, image_format, u
 
         # enable or disable intensity scaling - added to support concrete project
         if use_intensity_scaling:
-            img = zscore_normalize(img) # normalize with whole image stats
+            img = zscore_normalize(img)  # normalize with whole image stats
         print('  img.shape={}'.format(img.shape))
 
         if img.shape[0] > 1024 or img.shape[1] > 1024:
-            tile_size = 1024 # in theory UNet takes about 420x the amount of memory of the input image
+            tile_size = 1024  # in theory UNet takes about 420x the amount of memory of the input image
             # to a tile size of 1024 should require 1.7 GB of GPU memory
             segmented_mask = _inference_tiling(img, model, tile_size)
         else:
@@ -250,9 +251,9 @@ def inference(saved_model_filepath, image_folder, output_folder, image_format, u
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
             if 'tif' in image_format:
-                skimage.io.imsave(os.path.join(output_folder, slide_name), segmented_mask, compress=6, bigtiff=True, tile=(1024,1024))
+                skimage.io.imsave(os.path.join(output_folder, slide_name), segmented_mask, compression='zlib', compressionargs={'level': 6}, bigtiff=True, tile=(1024,1024))
             else:
-                skimage.io.imsave(os.path.join(output_folder, slide_name), segmented_mask, compress=6)
+                skimage.io.imsave(os.path.join(output_folder, slide_name), segmented_mask)
 
 
 def main():
@@ -281,7 +282,7 @@ def main():
     print('outputDir = {}'.format(output_dir))
     print('use_intensity_scaling = {}'.format(use_intensity_scaling))
 
-    image_format = 'tif'
+    image_format = 'png'  # TODO remove 'tif'
 
     inference(saved_model_filepath, image_dir, output_dir, image_format, use_intensity_scaling)
 

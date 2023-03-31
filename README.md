@@ -12,7 +12,7 @@ docker pull wipp/wipp-unet-cnn-inference-plugin
 ```bash
 #!/bin/bash
 
-version=0.0.8
+version=1.0.0
 docker build . -t wipp/wipp-unet-cnn-inference-plugin:latest
 docker build . -t wipp/wipp-unet-cnn-inference-plugin:${version}
 ```
