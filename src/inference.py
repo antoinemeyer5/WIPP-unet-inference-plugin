@@ -282,7 +282,7 @@ def main():
     print('outputDir = {}'.format(output_dir))
     print('use_intensity_scaling = {}'.format(use_intensity_scaling))
 
-    image_format = 'png'  # TODO remove 'tif'
+    image_format = 'tif'
 
     inference(saved_model_filepath, image_dir, output_dir, image_format, use_intensity_scaling)
 
