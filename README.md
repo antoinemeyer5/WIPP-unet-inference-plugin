@@ -26,7 +26,7 @@ docker run  --gpus device=all \
     -v "path/to/model/folder":/data/model \
     wipp/wipp-unet-cnn-inference-plugin \
     --outputDir /data/outputs \
-    --imageDir /data/images
+    --imageDir /data/inputs
     --savedModel /data/model 
 ```
 
